@@ -24,17 +24,27 @@ var Comment = Backbone.Model.extend({
   /* The argument passed to `initialize` is what the model is instantiated with:
    * in `new Comment(message)`, message will be passed to `initialize`. */
   initialize: function(message) {
-    /* Set the initial values for `votes` to 0 and `message` to the message.
+    /* Set the initial values for `votes` to 0 and the initial values of the message to `message`.
      * Remember to use setters when working with attributes! */
+     this.set({votes: 0, message: message});
   },
   votes: function() {
     /* Return the votes attribute on this model.
      * Remember to use a getter when working with attributes! */
+    console.log('VOTES = ', this.get('votes'));
+     return this.get('votes');
   },
   upvote: function(){
     // Set the `votes` attribute to the current vote count plus one.
-  }
+    this.set({votes: this.attributes.votes + 1});
+    console.log('VOTES = ', this.get('votes'));
+  },
   // Add a downvote function; don't forget the comma above.
+  downvote: function(){
+    // Set the `votes` attribute to the current vote count plus one.
+    this.set({votes: this.attributes.votes - 1});
+    console.log('VOTES = ', this.get('votes'));
+  },
 });
 
 /* - Backbone VIEW ------------------------------------------------------------
@@ -58,7 +68,7 @@ var CommentView = Backbone.View.extend({
     /* Let's break down the line above:
      * - `this`           => the CommentView instance
      * - `this.model`     => the model associated with this view instance
-     *   - This has not been set yet - it will be set later to a Comment model.
+     * - This has not been set yet - it will be set later to a Comment model.
      * - `this.model.on`  => register an event listener to the model
      * - `'change:votes'` => this first argument defines what to listen for
      *   - We can listen for a change on a specific attribute using a colon.
@@ -83,13 +93,13 @@ var CommentView = Backbone.View.extend({
     // As in step2, we define a template:
     var html = [
       '<div>',
-        '<span class="votes">',
+        '<span class="votes" style="color: #4499FF">',
           this.model.get('votes'),
         '<span>',
-        '<span class="comment">',
+        '<span class="comment" style="color: #FF9944">',
           this.model.get('message'),
         '</span>',
-        '</br>',
+        '<br>',
       '</div>'
     ].join('');
 
@@ -102,7 +112,7 @@ var CommentView = Backbone.View.extend({
      *
      * $el is a bucket for the html of a particular view.
      * If you modify the $el, the html on the page will be changed.
-     * Each view will have it's own $el, and you can always get to it
+     * Each view will have its own $el, and you can always get to it
      * using `this.$el`.
      *
      * Rendering now becomes as simple as setting the $el's html: */
@@ -137,7 +147,7 @@ var commentView = new CommentView({ model: comment });
  */
 
 // Append the view to the page. This is why we returned html from `render`:
-// $('body').append(commentView.render());
+$('body').append(commentView.render());
 
 /* The number of votes should be 0.
  * We set that as the initial default value in the comment model.
@@ -158,5 +168,6 @@ var commentView = new CommentView({ model: comment });
  * watch the eventlistener auto update the view.  Pretty cool, eh?
  */
     </script>
+    BOINK
   </body>
 </html>
